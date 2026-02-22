@@ -23,7 +23,10 @@ document.getElementById('btnProcess').addEventListener('click', async () => {
         renderResults(lastResults);
         updateStats(data);
         updateCharts(lastResults);
-        updateStatus(`Procesado con éxito: ${data.count} guías`, 'green');
+
+        let statusMsg = `Procesado con éxito: ${data.count} guías`;
+        if (data.isDemo) statusMsg = `✨ ${data.message}`;
+        updateStatus(statusMsg, data.isDemo ? 'orange' : 'green');
 
         syncScrollbars();
 

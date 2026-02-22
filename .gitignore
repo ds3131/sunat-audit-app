@@ -5,3 +5,4 @@ debug_xml.js
 test_api.js
 .gemini/
 .agent/
+.vercel
