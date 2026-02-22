@@ -3,8 +3,8 @@ let lastResults = [];
 let sortConfig = { key: null, direction: 'asc' };
 
 // ===== Client-side XML Extraction (mirrors lib/extractor.js) =====
-function extractorXMLBrowser(xmlContent) {
-    const parser = new fxparser.XMLParser({ ignoreAttributes: false });
+function extractorXMLBrowser(xmlContent, ParserClass) {
+    const parser = new ParserClass({ ignoreAttributes: false });
     const jsonObj = parser.parse(xmlContent);
     const ensureSingle = (val) => Array.isArray(val) ? val[0] : val;
     const da = ensureSingle(jsonObj.DespatchAdvice);
@@ -85,18 +85,41 @@ async function processFilesClientSide(files) {
 
     try {
         const resultados = [];
-        const xmlFiles = Array.from(files).filter(f => f.name.endsWith('.xml'));
+        // Filtro insensible a mayúsculas/minúsculas
+        const xmlFiles = Array.from(files).filter(f => /\.xml$/i.test(f.name));
+
+        if (xmlFiles.length === 0) {
+            throw new Error("No se encontraron archivos XML en la carpeta seleccionada.");
+        }
+
+        // Detectar el parser global (fxparser, XMLParser, etc.)
+        const ParserClass = (typeof fxparser !== 'undefined' ? fxparser.XMLParser :
+            (typeof XMLParser !== 'undefined' ? XMLParser : null));
+
+        if (!ParserClass) {
+            throw new Error("La librería fast-xml-parser no se cargó correctamente.");
+        }
 
         for (let i = 0; i < xmlFiles.length; i++) {
             try {
                 const content = await xmlFiles[i].text();
-                const info = extractorXMLBrowser(content);
+
+                // Usar la clase detectada
+                const parser = new ParserClass({ ignoreAttributes: false });
+                const jsonObj = parser.parse(content);
+                const ensureSingle = (val) => Array.isArray(val) ? val[0] : val;
+                const da = ensureSingle(jsonObj.DespatchAdvice);
+
+                if (!da) continue; // No es un XML de Guía de Remisión válido
+
+                // ... resto de la lógica de extracción (extractorXMLBrowser ya hace esto, pero mejor lo unificamos o aseguramos que use el parser correcto)
+                const info = extractorXMLBrowser(content, ParserClass);
                 const match = xmlFiles[i].name.match(/(\w{4}-\d+)\.xml$/i);
                 info["NRO DE SERIE Y GUIA"] = match ? match[1].toUpperCase() : xmlFiles[i].name;
                 info["ORIGEN DATA"] = "XML";
                 resultados.push(info);
             } catch (e) {
-                console.error(`Error procesando ${xmlFiles[i].name}:`, e.message);
+                console.error(`Error procesando ${xmlFiles[i].name}:`, e);
             }
 
             if (i % 50 === 0) updateStatus(`Procesando... ${i}/${xmlFiles.length} archivos`, 'blue');
