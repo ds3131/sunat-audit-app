@@ -1,0 +1,16 @@
+{
+    "name": "sunat-audit-app",
+    "version": "1.0.0",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "cors": "^2.8.6",
+        "express": "^5.2.1",
+        "fast-xml-parser": "^5.3.7",
+        "fs-extra": "^11.3.3",
+        "json2csv": "^6.0.0-alpha.2",
+        "pdf-parse": "^1.1.4"
+    }
+}
