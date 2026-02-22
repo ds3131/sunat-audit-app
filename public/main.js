@@ -93,12 +93,15 @@ async function processFilesClientSide(files) {
         }
 
         // Detectar el parser global con mayor robustez
-        const ParserClass = (typeof fxparser !== 'undefined' ? fxparser.XMLParser :
-            (typeof XMLParser !== 'undefined' ? XMLParser :
-                (typeof fxp !== 'undefined' ? fxp.XMLParser : null)));
+        let ParserClass = null;
+        if (typeof fxparser !== 'undefined') ParserClass = fxparser.XMLParser;
+        else if (typeof XMLParser !== 'undefined') ParserClass = XMLParser;
+        else if (typeof fxp !== 'undefined') ParserClass = fxp.XMLParser;
+        else if (window.fxparser && window.fxparser.XMLParser) ParserClass = window.fxparser.XMLParser;
+        else if (window.XMLParser) ParserClass = window.XMLParser;
 
         if (!ParserClass) {
-            throw new Error(`La librería fast-xml-parser no se cargó correctamente. (IDs detectados: ${typeof fxparser}, ${typeof XMLParser}, ${typeof fxp})`);
+            throw new Error(`Error técnico: La herramienta de lectura (fast-xml-parser) no logró activarse en tu navegador. (Status: ${typeof fxparser}, ${typeof XMLParser}, ${typeof fxp})`);
         }
 
         for (let i = 0; i < xmlFiles.length; i++) {
