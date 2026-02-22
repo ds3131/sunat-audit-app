@@ -92,12 +92,13 @@ async function processFilesClientSide(files) {
             throw new Error("No se encontraron archivos XML en la carpeta seleccionada.");
         }
 
-        // Detectar el parser global (fxparser, XMLParser, etc.)
+        // Detectar el parser global con mayor robustez
         const ParserClass = (typeof fxparser !== 'undefined' ? fxparser.XMLParser :
-            (typeof XMLParser !== 'undefined' ? XMLParser : null));
+            (typeof XMLParser !== 'undefined' ? XMLParser :
+                (typeof fxp !== 'undefined' ? fxp.XMLParser : null)));
 
         if (!ParserClass) {
-            throw new Error("La librería fast-xml-parser no se cargó correctamente.");
+            throw new Error(`La librería fast-xml-parser no se cargó correctamente. (IDs detectados: ${typeof fxparser}, ${typeof XMLParser}, ${typeof fxp})`);
         }
 
         for (let i = 0; i < xmlFiles.length; i++) {
