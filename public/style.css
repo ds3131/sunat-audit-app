@@ -155,6 +155,23 @@ header {
     transform: scale(1.02);
 }
 
+.btn-folder {
+    background: rgba(0, 210, 255, 0.2);
+    border: 1px solid var(--accent-blue);
+    color: white;
+    padding: 0 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.btn-folder:hover {
+    background: rgba(0, 210, 255, 0.4);
+    transform: scale(1.05);
+}
+
 /* Stats Cards */
 .stats-grid {
     display: grid;

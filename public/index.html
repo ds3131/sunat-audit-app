@@ -12,6 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;800&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fast-xml-parser"></script>
 </head>
 
 <body>
@@ -34,7 +35,10 @@
         <main class="main-content">
             <header>
                 <div class="search-bar">
-                    <input type="text" id="folderPath" placeholder="Pega la ruta de la carpeta aquí...">
+                    <input type="text" id="folderPath" placeholder="Pega la ruta (local) o selecciona carpeta ➡">
+                    <input type="file" id="folderPicker" webkitdirectory multiple style="display:none">
+                    <button id="btnSelectFolder" class="btn-folder"
+                        title="Seleccionar carpeta desde el navegador">📂</button>
                     <button id="btnProcess">Iniciar Auditoría</button>
                 </div>
                 <div class="status-indicator" id="statusText">Sistema Listo</div>
