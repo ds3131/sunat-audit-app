@@ -1,0 +1,7 @@
+node_modules/
+.env
+Reporte_Detallado_*.csv
+debug_xml.js
+test_api.js
+.gemini/
+.agent/
