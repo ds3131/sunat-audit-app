@@ -99,6 +99,7 @@ async function processFilesClientSide(files) {
         else if (typeof fxp !== 'undefined') ParserClass = fxp.XMLParser;
         else if (window.fxparser && window.fxparser.XMLParser) ParserClass = window.fxparser.XMLParser;
         else if (window.XMLParser) ParserClass = window.XMLParser;
+        else if (window.fxp && window.fxp.XMLParser) ParserClass = window.fxp.XMLParser;
 
         if (!ParserClass) {
             throw new Error(`Error técnico: La herramienta de lectura (fast-xml-parser) no logró activarse en tu navegador. (Status: ${typeof fxparser}, ${typeof XMLParser}, ${typeof fxp})`);

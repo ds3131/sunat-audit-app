@@ -12,7 +12,23 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;800&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fast-xml-parser@4.5.3/lib/fxp.min.js"></script>
+    <!-- Multi-CDN Fallback para fast-xml-parser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fast-xml-parser/4.4.1/fxp.min.js"
+        onerror="console.warn('CDN 1 failed, trying CDN 2...')"></script>
+    <script>
+        if (typeof fxparser === 'undefined' && typeof XMLParser === 'undefined') {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/fast-xml-parser@4.4.1/lib/fxp.min.js"><\/script>');
+        }
+    </script>
+    <script>
+        window.addEventListener('load', () => {
+            console.log("Library check:", {
+                fxparser: typeof fxparser,
+                XMLParser: typeof XMLParser,
+                fxp: typeof fxp
+            });
+        });
+    </script>
 </head>
 
 <body>
